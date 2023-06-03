@@ -1,35 +1,61 @@
-import React from 'react'
+import TweetsCard from 'components/TweetsCard';
+import React, { useState } from 'react'
 import { useEffect } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchUser } from 'redux/operations/userOperations';
 import { selectUsers } from 'redux/selectors/user';
+import { Container } from 'shared/components/Container/Container.styled';
+import { TweetsPageCss } from './TweetsPage.styled';
+import Pagination from 'components/Pagination';
 
 const TweetsPage = () => {
-  const users = useSelector(selectUsers);
   const dispatch = useDispatch();
-  console.log('tweets page', users)
+  const users = useSelector(selectUsers);
+  
+  const [currentPageNumber, setCurrentPageNumber] = useState(1);
+  const [cardsPerPage] = useState(3);
+  const indexOfLastItem = currentPageNumber * cardsPerPage;
+  const indexoFirstItem = indexOfLastItem - cardsPerPage;
+  const currentUsers = users.slice(indexoFirstItem, indexOfLastItem)
 
   useEffect(() => {
     console.log('here effect')
-    dispatch(fetchUser());
+    if (!users.length) {
+      dispatch(fetchUser());
+    }
     console.log('here after')
-  }, [dispatch])
+  }, [dispatch, users])
+
+  const paginate = (pageNumber) => {
+    setCurrentPageNumber(pageNumber);
+  }
 
   return (
-    <section>
-      {users.length !== 0 && (
-        <ul>
-          {users.map((user) => (
-            <li key={user._id}>
-              <img src={user.avatar} alt={user.name} width={180} height={150}/>
-              <p>{user.tweets}</p>
-              <p>{user.followers}</p>
-            </li>
-          ))}
-        </ul>
-      )}
-    </section>
+    <Container>
+      <TweetsPageCss className="tweets">
+        {users.length !== 0 && (
+          <ul className="tweets-list">
+            {currentUsers.map((user) => (
+              <li
+                className={`card ${
+                  user.isFollowing ? "card-following" : "card-follow"
+                }`}
+                key={user._id}
+              >
+                <TweetsCard user={user} />
+              </li>
+            ))}
+          </ul>
+        )}
+        <Pagination
+          paginate={paginate}
+          totalUsers={users.length}
+          cardsPerPage={cardsPerPage}
+          currentPageNumber={currentPageNumber}
+        />
+      </TweetsPageCss>
+    </Container>
   );
 }
 

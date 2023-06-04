@@ -3,25 +3,22 @@ import { NavLink } from 'react-router-dom';
 import { selectUsers } from 'redux/selectors/user';
 import { PaginationCss } from './Pagination.styled';
 
-const Pagination = ({cardsPerPage, currentPageNumber, paginate}) => {
-    const users = useSelector(selectUsers);
-    const totalUsers = users.length;
-    console.log('total users', users, totalUsers)
+const Pagination = ({cardsPerPage, currentPageNumber, paginate, followUsers, followingUsers}) => {
+  const users = useSelector(selectUsers);
+
+  const totalUsers = followUsers ? followUsers.length : followingUsers ? followingUsers.length : users.length;
 
     const pageNumbers = [];
 
-    console.log(totalUsers / cardsPerPage);
-
     for (let i = 1; i <= Math.ceil(totalUsers / cardsPerPage); i += 1) {
         pageNumbers.push(i)
-        console.log('page numbers', pageNumbers)
     }
 
   return (
     <PaginationCss>
       <ul className="pagi-list">
         {pageNumbers.map((number) => (
-          <li
+          <li key={number}
             className={`pagi-item ${
               number === currentPageNumber ? "page-active" : "page"
             }`}

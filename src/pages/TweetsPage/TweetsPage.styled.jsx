@@ -2,7 +2,33 @@ import styled from "@emotion/styled";
 
 export const TweetsPageCss = styled.section`
   padding-top: 40px;
+
+
+    position: relative;
+
+  .tweet-link {
+    position: absolute;
+    top: 2.5%;
+    left: 29%;
+
+    padding: 20px 30px;
+    background: ${({ theme }) => theme.background.purple}
+      ${({ theme }) => theme.colors.hover};
+    color: ${({ theme }) => theme.colors.white};
+
+    border-radius: 10px;
+
+    transition: background-color 250ms ease-in-out, color 250ms ease-in-out, border-radius 250ms ease-in-out;
+
+    &:hover,
+    &:focus {
+      background-color: ${({ theme }) => theme.colors.white};
+      color: #000;
+      border-radius: 10px 30px;
+    }
+  }
   .tweets-list {
+    margin-top: 40px;
     display: flex;
     flex-direction: column;
 
@@ -19,7 +45,6 @@ export const TweetsPageCss = styled.section`
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
-      justify-content: space-between;
       row-gap: 20px;
     }
   }

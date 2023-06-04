@@ -36,3 +36,7 @@ img {
   display: inline-block;
   max-width: 450px;
 }
+
+button {
+  cursor: pointer;
+}

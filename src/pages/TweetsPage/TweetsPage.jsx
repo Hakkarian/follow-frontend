@@ -8,10 +8,16 @@ import { selectUsers } from 'redux/selectors/user';
 import { Container } from 'shared/components/Container/Container.styled';
 import { TweetsPageCss } from './TweetsPage.styled';
 import Pagination from 'components/Pagination';
+import { NavLink } from 'react-router-dom';
+import DropDownMenu from 'shared/components/DropDownMenu';
 
 const TweetsPage = () => {
   const dispatch = useDispatch();
-  const users = useSelector(selectUsers);
+  const allUsers = useSelector(selectUsers);
+  const [followUsers, setFollowUsers] = useState(null);
+  const [followingUsers, setFollowingUsers] = useState(null);
+  const users = followUsers || followingUsers || allUsers;
+  console.log('chosen users', users)
   
   const [currentPageNumber, setCurrentPageNumber] = useState(1);
   const [cardsPerPage] = useState(3);
@@ -20,20 +26,40 @@ const TweetsPage = () => {
   const currentUsers = users.slice(indexoFirstItem, indexOfLastItem)
 
   useEffect(() => {
-    console.log('here effect')
     if (!users.length) {
       dispatch(fetchUser());
     }
-    console.log('here after')
   }, [dispatch, users])
 
   const paginate = (pageNumber) => {
     setCurrentPageNumber(pageNumber);
   }
 
+  const filterFollow = () => {
+     console.log('here follow')
+    const followUsers = allUsers.filter((user) => user.isFollowing === false);
+    console.log('filterFollow', followUsers)
+    setFollowUsers(followUsers)
+    console.log('follow', followUsers)
+  };
+  const filterFollowing = () => {
+    console.log("here following");
+    const followingUsers = allUsers.filter((user) => user.isFollowing);
+
+    setFollowingUsers(followingUsers);
+  };
+  const filterAll = () => {
+    setFollowUsers(null);
+    setFollowingUsers(null);
+  };
+
   return (
     <Container>
       <TweetsPageCss className="tweets">
+        <NavLink className="tweet-link" to="/">
+          Back
+        </NavLink>
+        <DropDownMenu filterFollow={filterFollow} filterFollowing={filterFollowing} filterAll={filterAll} />
         {users.length !== 0 && (
           <ul className="tweets-list">
             {currentUsers.map((user) => (
@@ -53,6 +79,8 @@ const TweetsPage = () => {
           totalUsers={users.length}
           cardsPerPage={cardsPerPage}
           currentPageNumber={currentPageNumber}
+          followUsers={followUsers}
+          followingUsers={followingUsers}
         />
       </TweetsPageCss>
     </Container>

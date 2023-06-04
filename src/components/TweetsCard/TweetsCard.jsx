@@ -7,17 +7,25 @@ import { followTweet, notFollowTweet } from 'redux/reducers/userReducer';
 const TweetsCard = ({ user }) => {
     const dispatch = useDispatch();
 
-
   const handleFollow = (user) => {
-    const { isFollowing } = user;
-        console.log('here', isFollowing)
+    console.log('here handleFollow')
+      const {isFollowing} = user
         if (isFollowing) {
             dispatch(notFollowTweet(user))
         }
         if (!isFollowing) {
-            dispatch(followTweet(user))
-        }
+            dispatch(followTweet(user));
     }
+    }
+
+  const decorateFollowers = (number) => {
+    if (number > 1000) {
+      const numArr = number.toString().split('');
+      numArr.splice(numArr.length - 3, 0, ',')
+
+      return numArr.join('')
+    }
+  }
   return (
     <>
       <img className="logo" src={logo} alt="logo" />
@@ -48,7 +56,7 @@ const TweetsCard = ({ user }) => {
           }`}
         >
           <p className="tweets">{user.tweets} tweets</p>
-          <p className="followers">{user.followers} followers</p>
+          <p className="followers">{decorateFollowers(user.followers)} followers</p>
         </div>
         <button
           className={user.isFollowing ? "following" : "follow"}

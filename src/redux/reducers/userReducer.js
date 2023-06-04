@@ -1,4 +1,4 @@
-const { createSlice, current } = require("@reduxjs/toolkit");
+const { createSlice } = require("@reduxjs/toolkit");
 const { fetchUser } = require("redux/operations/userOperations");
 
 const initialState = {
@@ -33,9 +33,22 @@ const userSlice = createSlice({
       })
       .addCase(fetchUser.fulfilled, (state, { payload }) => {
         state.isLoading = false;
-        console.log("user slice", payload);
+
         state.users = payload;
-      });
+      })
+      // .addCase(updateFollowing.pending, (state) => {
+      //   state.isLoading = true;
+      // })
+      // .addCase(updateFollowing.rejected, (state, { payload }) => {
+      //   state.isLoading = false;
+      //   state.error = payload;
+      // })
+      // .addCase(updateFollowing.fulfilled, (state, { payload }) => {
+      //   state.isLoading = false;
+      //   console.log("user slice", payload);
+      //   const selectedUser = state.users.find(user => user._id === payload._id)
+      //   selectedUser.isFollowing = payload.isFollowing;
+      // });
   },
 });
 

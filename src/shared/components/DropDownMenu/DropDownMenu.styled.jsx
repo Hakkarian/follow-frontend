@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 export const DropDownMenuCss = styled.div`
   position: absolute;
   top: 2%;
-  right: 2%;
+  right: -3%;
   .dropdown {
     position: relative;
     width: 120px;
